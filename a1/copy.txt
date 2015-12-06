@@ -1,0 +1,62 @@
+#include <iostream>
+#include <sstream>
+#include <string>
+#include "room.h"
+
+using namespace std;
+
+int main(){
+	
+	cout<<"Welcome to the game."<<endl;
+	
+	int numberOfRooms;
+	cin>>numberOfRooms;
+	
+	Room* rooms[numberOfRooms];
+	
+	for(int i = 0; i<numberOfRooms; i++){
+		string name;
+		stringstream ss;
+		ss<<i;
+		name = ss.str();
+		Room* r = new Room(name);
+		rooms[i] = r;
+	}
+	
+	for(int i = 0; i<numberOfRooms; i++){
+		string s;
+		getline(cin, s);
+		
+		istringstream iss(s);
+		string subs[5];
+		
+		int j = 0;
+		do{
+			string sub;
+			iss >> sub;
+			if(sub != ""){
+				subs[j] = sub;
+				j++;
+			}
+			
+		} while(iss);
+		
+		rooms[i]->setCondition(subs[0]);
+		
+		for(int k = 1; k<5; k++){
+			if(subs[k] != "-1"){
+				for(int meow = 0; meow<numberOfRooms; meow++){
+					if(rooms[meow]->getName() == subs[k]){
+						rooms[i]->addAdjacent(rooms[meow], k-1);
+					}	
+				}
+			}
+		}
+		cout<<"Goodbye."<<endl;
+	}
+	
+	for(int i = 0; i<numberOfRooms; i++){
+		delete rooms[i];
+	}
+
+}
